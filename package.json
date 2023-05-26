@@ -1,0 +1,28 @@
+{
+  "name": "calories_counter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^6.1.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "ant-design-vue": "^3.2.20",
+    "chart.js": "^4.3.0",
+    "dayjs": "^1.11.7",
+    "node-sass": "^8.0.0",
+    "pinia": "^2.0.35",
+    "vue": "^3.2.47",
+    "vue-chartjs": "^5.2.0",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "sass": "^1.62.1",
+    "sass-loader": "^13.2.2",
+    "vite": "^4.3.2"
+  }
+}
