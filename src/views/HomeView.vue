@@ -41,10 +41,10 @@
         }
     }   
 
-    const percentageOfDailyIntake = computed(() => {
-        Math.round(100 * currentDay.total.calories / personalData.dailyIntake)
-    //    100 * currentDay.total.calories / personalData.dailyIntake
-    })
+    // const percentageOfDailyIntake = computed(() => {
+    //     Math.round(100 * currentDay.total.calories / personalData.dailyIntake)
+    // //    100 * currentDay.total.calories / personalData.dailyIntake
+    // })
 
 </script>
 
@@ -94,10 +94,10 @@
                     <td>Употреблено калорий</td>
                     <td>{{ currentDay.total.calories }}</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td>{{ percentageOfDailyIntake.value }} % от РСК</td>
                     <td>{{ personalData.dailyIntake }}</td>
-                </tr>
+                </tr> -->
             </table>
             <a-progress :percent="30" />
         </div>
