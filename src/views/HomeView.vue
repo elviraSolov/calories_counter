@@ -1,7 +1,7 @@
 <script setup>
     import AppTable from '../components/AppTable.vue'
     import AppModal from '../components/AppModal.vue'
-    import { ref, computed, onBeforeMount } from 'vue'
+    import { ref, onBeforeMount } from 'vue'
     import dayjs from 'dayjs'
     import { useCalendarStore } from '../store/calendar'
     import { useCalculationStore } from '../store/calculation'
@@ -18,7 +18,7 @@
         { key: 'dinner', tab: 'Ужин' }
     ]
 
-    const mealTabKey = ref()
+    const mealTabKey = ref('breakfast')
 
     const onTabChange = (value, type) => (type === 'key') ? key.value = value : mealTabKey.value = value
 
@@ -29,23 +29,21 @@
     })
     
     const date = ref(dayjs())
-
-    onBeforeMount(() => calendarStore.setCurrentDay(formatDate(date.value.$d)))
+    const isLoaded = ref(false)
 
     const setDate = () => {
         if (date.value) {
-            const {day, month, year} = formatDate(date.value.$d)
+            const { day, month, year } = formatDate(date.value.$d)
             calendarStore.setCurrentDay(day, month, year)
         } else {
             return
         }
     }   
 
-    // const percentageOfDailyIntake = computed(() => {
-    //     Math.round(100 * currentDay.total.calories / personalData.dailyIntake)
-    // //    100 * currentDay.total.calories / personalData.dailyIntake
-    // })
-
+    if (!isLoaded.value) {
+        setDate()
+        isLoaded.value = true
+    }
 </script>
 
 <template>
@@ -65,27 +63,34 @@
         </div>
 
         <a-card
+            class="meals"
             :tab-list="mealTabList"
-       
+            v-model:mealTabKey="mealTabKey"
             @tabChange="key => onTabChange(key, 'mealTabKey')"
         >
-            <div v-if="mealTabKey === 'breakfast'">
+            <div key="breakfast" v-if="mealTabKey === 'breakfast'">
                 <app-modal :meal="`breakfast`"/>
                 <app-table :meal="`breakfast`"/>
             </div>
-            <div v-else-if="mealTabKey === 'lunch'">
+            <div key="lunch" v-else-if="mealTabKey === 'lunch'">
                 <app-modal :meal="`lunch`"/>
                 <app-table :meal="`lunch`"/>
             </div>
-            <div v-else>
+            <div key="dinner" v-else>
                 <app-modal :meal="`dinner`"/>
                 <app-table :meal="`dinner`"/>
             </div>
         </a-card>
 
-        <div style="display: flex;">
-            <h2>Сводка</h2>
-            <table>
+        <div class="summary">
+            <a-progress 
+                class="summary__progress-bar"
+                :percent="Math.round(100 * currentDay.total.calories / personalData.dailyIntake)" 
+            />
+            
+            <h2 class="summary__title">Сводка</h2>
+            
+            <table class="summary__table table">
                 <tr>
                     <td>Осталось калорий</td>
                     <td>{{ personalData.dailyIntake - currentDay.total.calories }}</td>
@@ -94,12 +99,11 @@
                     <td>Употреблено калорий</td>
                     <td>{{ currentDay.total.calories }}</td>
                 </tr>
-                <!-- <tr>
-                    <td>{{ percentageOfDailyIntake.value }} % от РСК</td>
+                <tr>
+                    <td>{{ Math.round(100 * currentDay.total.calories / personalData.dailyIntake) }} % от РСК</td>
                     <td>{{ personalData.dailyIntake }}</td>
-                </tr> -->
+                </tr>
             </table>
-            <a-progress :percent="30" />
         </div>
     </div>
     
@@ -123,5 +127,23 @@
         &:not(:last-child) {
             margin-right: 15px;
         }
+    }
+
+    .meals {
+        margin-bottom: 15px;
+    }
+
+    .summary {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .summary__progress-bar {
+        margin-bottom: 10px;
+    }
+
+    .summary__table {
+        width: 250px;
     }
 </style>

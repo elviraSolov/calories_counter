@@ -16,15 +16,7 @@
         personalData.sex = sex
         personalData.activity = activity
 
-        console.log(personalData.age)
-        console.log(personalData.weight)
-        console.log(personalData.height)
-        console.log(personalData.sex)
-        console.log(personalData.activity)
-
-        let intake = calculateDailyIntake()
-
-        console.log(intake)
+        calculateDailyIntake()
     }
 
 </script>
@@ -69,7 +61,11 @@
             </a-radio-group>
         </fieldset>
 
-        <a-button type="primary" @click="setPersonalData()">Сохранить</a-button>
+        <a-button type="primary" @click="setPersonalData()">Рассчитать</a-button>
+
+        <div v-show="personalData.dailyIntake">
+            Ваша суточная норма калорий - {{ personalData.dailyIntake }}
+        </div>
     </form>
 </template>
 

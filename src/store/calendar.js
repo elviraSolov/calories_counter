@@ -6,12 +6,42 @@ export const useCalendarStore = defineStore('calendar', {
         currentDay: {},
     }),
     actions: {
-        setCurrentDay(day, month, year) {
-            const selectedDay = this.calendar.find((element) => element.date.day == day && element.date.month == month && element.date.year == year)
+        // setCurrentDay(day, month, year) {
+        //     const selectedDay = this.calendar.find((element) => element.date.day == day && element.date.month == month && element.date.year == year)
 
+        //     if (selectedDay) {
+        //         this.currentDay = selectedDay
+        //     } else {
+        //         const newCalendarDay = {
+        //             date: {
+        //                 day: day,
+        //                 month: month,
+        //                 year: year
+        //             },
+        //             breakfast: [],
+        //             lunch: [],
+        //             dinner: [],
+        //             total: {
+        //                 calories: 0,
+        //                 proteins: 0,
+        //                 fats: 0,
+        //                 carbs: 0
+        //             }                    
+        //         }
+
+        //         this.calendar.push(newCalendarDay)
+        //         this.currentDay = newCalendarDay
+        //     }
+        // },
+        setCurrentDay(day, month, year) {
+            // Проверяем наличие дня с выбранной датой
+            const selectedDay = this.calendar.find((element) => element.date.day == day && element.date.month == month && element.date.year == year)
+        
             if (selectedDay) {
+                // Если найден день с той же датой, используем его вместо создания нового дня
                 this.currentDay = selectedDay
             } else {
+                // В противном случае создаем новый день и добавляем его в массив
                 const newCalendarDay = {
                     date: {
                         day: day,
@@ -28,7 +58,7 @@ export const useCalendarStore = defineStore('calendar', {
                         carbs: 0
                     }                    
                 }
-
+        
                 this.calendar.push(newCalendarDay)
                 this.currentDay = newCalendarDay
             }
