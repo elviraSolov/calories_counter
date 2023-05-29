@@ -136,7 +136,6 @@
     .summary {
         display: flex;
         flex-direction: column;
-
     }
 
     .summary__progress-bar {
@@ -145,5 +144,9 @@
 
     .summary__table {
         width: 250px;
+    }
+
+    td {
+        padding: 5px 0;
     }
 </style>

@@ -1,72 +1,80 @@
 <script setup>
-    import { ref } from 'vue'
+    import { ref, computed, reactive } from 'vue'
     import { useCalculationStore } from '../store/calculation'
     const { personalData, calculateDailyIntake } = useCalculationStore()
 
-    const age = ref()
-    const weight = ref()
-    const height = ref()
-    const sex = ref('male')
-    const activity = ref()
+    const form = reactive({
+        age: '',
+        weight: '',
+        height: '',
+        sex: '',
+        activity: ''
+    })
 
     const setPersonalData = () => {
-        personalData.age = age
-        personalData.weight = weight
-        personalData.height = height
-        personalData.sex = sex
-        personalData.activity = activity
+        personalData.age = form.age
+        personalData.weight = form.weight
+        personalData.height = form.height
+        personalData.sex = form.sex
+        personalData.activity = form.activity
 
         calculateDailyIntake()
+        resetForm()
     }
 
+    const isFormInvalid = computed(() => {
+        return !form.age || !form.weight || !form.height || !form.sex || !form.activity
+    })
+
+    const resetForm = () => {
+        form.age = ''
+        form.weight = ''
+        form.height = ''
+        form.sex = ''
+        form.activity = ''
+    }
 </script>
 
 <template>
     <h1>Расчет суточной потребности в калориях</h1>
 
-    <form class="form">
-        <div class="phisical-data">
-            <label class="form__label">
-                <span class="form__label-text">Возраст, лет</span>
-                <a-input-number min="1" max="100" v-model:value="age"/>
-            </label>
-
-            <label class="form__label">
-                <span class="form__label-text">Вес, кг.</span>
-                <a-input-number v-model:value="weight"/>
-            </label>
-
-            <label class="form__label">
-                <span class="form__label-text">Рост, см.</span>
-                <a-input-number v-model:value="height"/>
-            </label>
-        </div>
-
-        <fieldset class="field-group">
-            <legend class="field-group__legend">Пол</legend>
-            <a-radio-group v-model:value="sex">
+    <a-form>
+        <a-form-item label="Возраст, лет">
+            <a-input-number min="1" max="100" v-model:value="form.age"/>
+        </a-form-item>
+        <a-form-item label="Вес, кг">
+            <a-input-number :min="5" v-model:value="form.weight"/>
+        </a-form-item>
+        <a-form-item label="Рост, см">
+            <a-input-number :min="40" :max="300" v-model:value="form.height"/>
+        </a-form-item>
+        <a-form-item label="Пол">
+            <a-radio-group v-model:value="form.sex">
                 <a-radio :value="`male`">Мужской</a-radio>
                 <a-radio :value="`female`">Женский</a-radio>
             </a-radio-group>
-        </fieldset>        
-
-        <fieldset class="field-group">
-            <legend class="field-group__legend">Степень физической активности</legend>
-            <a-radio-group v-model:value="activity">
+        </a-form-item>
+        <a-form-item label="Степень физической активности">
+            <a-radio-group v-model:value="form.activity">
                 <a-radio :value="1.2">Минимальная активность</a-radio>
                 <a-radio :value="1.375">Слабый уровень активности</a-radio>
                 <a-radio :value="1.55">Умеренный уровень активности</a-radio>
                 <a-radio :value="1.7">Тяжелая или трудоемкая активность</a-radio>
                 <a-radio :value="1.9">Экстремальный уровень</a-radio>
             </a-radio-group>
-        </fieldset>
+        </a-form-item>
+        <a-button 
+            type="primary" 
+            @click="setPersonalData()"
+            :disabled="isFormInvalid"
+        >
+            Рассчитать
+        </a-button>
+    </a-form>
 
-        <a-button type="primary" @click="setPersonalData()">Рассчитать</a-button>
-
-        <div v-show="personalData.dailyIntake">
-            Ваша суточная норма калорий - {{ personalData.dailyIntake }}
-        </div>
-    </form>
+    <div v-show="personalData.dailyIntake">
+        Ваша суточная норма калорий - {{ personalData.dailyIntake }}
+    </div>
 </template>
 
 <style lang="scss" scoped>

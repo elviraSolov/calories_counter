@@ -1,5 +1,5 @@
 <script setup>  
-    import { ref, defineProps } from 'vue'
+    import { ref, reactive, defineProps, computed } from 'vue'
     import { useProductsStore } from '../store/products'
     import { useCalendarStore } from '../store/calendar'
 
@@ -9,32 +9,41 @@
     const calendarStore = useCalendarStore()
     
     const visible = ref(false)
-    const selectedProduct = ref()
-    const weight = ref(100)
+
+    const form = reactive({
+        product: '',
+        weight: ''
+    })
 
     const showModal = () => visible.value = true
+    
     const hideModal = () => {
         visible.value = false
-        selectedProduct.value = ''
-        weight.value = 100
+        resetForm()
     }
 
+    const resetForm = () => {
+        form.product = ''
+        form.weight = ''
+    }
+
+    const isFormInvalid = computed(() => {
+        return !form.product || !form.weight
+    })
+
     const clickAddBtn = () => {
-        //ищет продукт по имени
-        let product = products.find(product => product.name == selectedProduct.value)
+        let product = products.find(product => product.name == form.product)
         const { calories, proteins, fats, carbs } = product
 
-        // создает копию продукта 
         const copiedProduct = {
             ...product,
-            weight: weight.value,
-            calories: `${(parseInt(calories) * weight.value / 100)} кКал`,
-            proteins: `${(parseFloat(proteins) * weight.value) / 100} г`,
-            fats: `${(parseFloat(fats) * weight.value) / 100} г`,
-            carbs: `${(parseFloat(carbs) * weight.value) / 100} г`
+            weight: form.weight,
+            calories: `${(parseInt(calories) * form.weight / 100)} кКал`,
+            proteins: `${(parseFloat(proteins) * form.weight) / 100} г`,
+            fats: `${(parseFloat(fats) * form.weight) / 100} г`,
+            carbs: `${(parseFloat(carbs) * form.weight) / 100} г`
         }
 
-        // добавляет в meal текущего дня
         calendarStore.addProduct(meal, copiedProduct)
         hideModal()
     }
@@ -55,18 +64,25 @@
         <a-button type="primary" @click="showModal">Добавить</a-button>
 
         <a-modal v-model:visible="visible" title="Добавление продукта">
-            <a-auto-complete
-                class="field"
-                placeholder="Поиск..."
-                v-model:value="selectedProduct"
-                :options="productNames"
-                :filter-option="filterOption"
-            />
 
-            <a-input-number 
-                id="inputNumber" 
-                v-model:value="weight" 
-            />
+            <a-form>
+                <a-form-item label="Продукт" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
+                    <a-auto-complete
+                        placeholder="Поиск..."
+                        v-model:value="form.product"
+                        :options="productNames"
+                        :filter-option="filterOption"
+                    />
+                </a-form-item>
+
+                <a-form-item label="Масса, грамм" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
+                    <a-input-number 
+                        :min="1"
+                        id="inputNumber" 
+                        v-model:value="form.weight" 
+                    />
+                </a-form-item>
+            </a-form>
 
             <template #footer>
                 <a-button key="back" @click="hideModal">Назад</a-button>
@@ -74,6 +90,7 @@
                     key="submit" 
                     type="primary" 
                     @click="clickAddBtn"
+                    :disabled="isFormInvalid"
                 >
                     Добавить
                 </a-button>
@@ -84,11 +101,6 @@
 
 <style scoped>
     .modal {
-        margin-bottom: 15px;
-    }
-
-    .field {
-        width: 100%;
         margin-bottom: 15px;
     }
 </style>

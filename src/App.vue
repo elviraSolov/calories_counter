@@ -62,7 +62,8 @@
   </a-layout>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import "../src/assets/scss/variables.scss";
   .layout {
     height: 100vh;
   }

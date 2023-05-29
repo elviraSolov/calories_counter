@@ -1,41 +1,48 @@
 <script setup>  
-    import { ref } from 'vue'
+    import { ref, reactive, computed } from 'vue'
     import { useProductsStore } from '../store/products'
 
     const { addProduct } = useProductsStore()
       
-    const name = ref()
-    const calories = ref()
-    const proteins = ref()
-    const fats = ref()
-    const carbs = ref()
+    const form = reactive ({
+        name: '',
+        calories: null,
+        proteins: null,
+        fats: null,
+        carbs: null
+    })
 
-    const visible = ref(false)
-    const error = ref(false)
-    const errorMessage = ref('Заполните все обязательные поля')
+    const modalVisible = ref(false)
 
-    const showModal = () => visible.value = true
+    const showModal = () => modalVisible.value = true
+
     const hideModal = () => {
-        visible.value = false
-        error.value = false
-        name.value = calories.value = proteins.value = fats.value = carbs.value = ''
+        modalVisible.value = false
+        resetForm()
     }
 
-    const clickAddBtn = () => {
-        if (name.value && calories.value && proteins.value && fats.value && carbs.value) {
-            const product = {
-                name: name.value,
-                calories: `${calories.value} кКал`,
-                proteins: `${proteins.value} г`,
-                fats: `${fats.value} г`,
-                carbs: `${carbs.value} г`
-            }
+    const isFormInvalid = computed(() => {
+        return !form.name || !form.calories || !form.proteins || !form.fats || !form.carbs
+    })
 
-            addProduct(product)
-            hideModal()
-        } else {
-            error.value = true
+    const submitForm = () => {
+        const product = {
+            name: form.name,
+            calories: `${form.calories} кКал`,
+            proteins: `${form.proteins} г`,
+            fats: `${form.fats} г`,
+            carbs: `${form.carbs} г`
         }
+        addProduct(product)
+        hideModal()
+    }
+
+    const resetForm = () => {
+        form.name = ''
+        form.calories = null
+        form.proteins = null
+        form.fats = null
+        form.carbs = null
     }
 </script>
 
@@ -44,44 +51,35 @@
         <a-button type="primary" @click="showModal">
             Добавить
         </a-button>
-        <a-modal v-model:visible="visible" title="Добавить продукт в справочник">
-           
-            <p class="error" v-show="error">{{ errorMessage }}</p>
+        <a-modal v-model:visible="modalVisible" title="Добавить продукт в справочник">
+           <a-form :modal="form">
 
-            <a-input 
-                v-model:value="name"
-                placeholder="Название" 
-                style="margin-bottom: 15px;"
-            />
+            <a-form-item label="Название" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                <a-input v-model:value="form.name"/>
+            </a-form-item>
 
-            <div class="field-group">
-                <a-input-number 
-                    id="inputNumber" 
-                    v-model:value="calories" 
-                    placeholder="Калории"
-                />
-                <a-input-number 
-                    id="inputNumber" 
-                    v-model:value="proteins" 
-                    placeholder="Белки"
-                />
-                <a-input-number 
-                    id="inputNumber" 
-                    v-model:value="fats" 
-                    placeholder="Жиры"
-                />
-                <a-input-number 
-                    id="inputNumber" 
-                    v-model:value="carbs" 
-                    placeholder="Углеводы"
-                />
-            </div>
+            <a-form-item label="Калории" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                <a-input-number v-model:value="form.calories" :min="1"/>
+            </a-form-item>
+
+            <a-form-item label="Белки, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                <a-input-number v-model:value="form.proteins" :min="1"/>
+            </a-form-item>
+
+            <a-form-item label="Жиры, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                <a-input-number v-model:value="form.fats" :min="1"/>
+            </a-form-item>
+
+            <a-form-item label="Углеводы, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                <a-input-number v-model:value="form.carbs" :min="1"/>
+            </a-form-item>
+           </a-form>
 
             <template #footer>
                 <a-button key="back" @click="hideModal">
                     Назад
                 </a-button>
-                <a-button key="submit" @click="clickAddBtn" type="primary">
+                <a-button key="submit" @click="submitForm" type="primary" :disabled="isFormInvalid">
                     Добавить
                 </a-button>
             </template>
@@ -90,16 +88,7 @@
 </template>
 
 <style scoped>
-    .field-group {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-    }
     .modal {
         margin-bottom: 15px;
-    }
-
-    .error {
-        color: red;
     }
 </style>
