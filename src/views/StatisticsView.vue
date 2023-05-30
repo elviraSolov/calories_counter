@@ -56,23 +56,25 @@
 
         <!-- Выбор дат -->
         <a-range-picker 
+            class="range-picker"
             :value="dates"
             @change="onDatesChange"    
         />
 
         <!-- Статистика за выбранный диапазон дат -->
-        <div class="bar">
+        <div>
             <Bar v-if="dates"
                 :data="chartData"
             /> 
 
-            <h3 class="bar__title" v-else>Для отображения статистики выберите даты</h3>
+            <h3 v-else>Для отображения статистики выберите даты</h3>
         </div>     
     </div>
 </template>
 
-<style scoped>
-    .bar__title {
-        margin-top: 10px;
+<style lang="scss" scoped>
+    @import "src/assets/scss/variables.scss";
+    .range-picker {
+        margin-bottom: $margin-bottom;
     }
 </style>

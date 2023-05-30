@@ -74,11 +74,12 @@
 </template>
 
 <style lang="scss" scoped>
+    @import "src/assets/scss/mixins.scss";
+    
     .field-group {
         align-items: baseline;
     }
     .field-group__list {
-        display: flex;
-        flex-direction: column;
+        @include column;
     }
 </style>

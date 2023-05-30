@@ -36,8 +36,10 @@
     </a-card>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import "src/assets/scss/variables.scss";
+    
     .modal {
-        margin-bottom: 15px;
+        margin-bottom: $margin-bottom;
     }
 </style>

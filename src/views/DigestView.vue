@@ -24,12 +24,10 @@
     <app-digest-table :tableData="filteredProducts"/>
 </template>
 
-<style scoped>
-    .modal {
-        margin-bottom: 15px;
-    }
+<style lang="scss" scoped>
+    @import "src/assets/scss/variables.scss";
 
-    .search {
-        margin-bottom: 15px;
+    .modal, .search {
+        margin-bottom: $margin-bottom;
     }
 </style>

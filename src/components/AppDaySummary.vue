@@ -35,14 +35,16 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import "src/assets/scss/variables.scss";
+    @import "src/assets/scss/mixins.scss";
+
     .summary {
-        display: flex;
-        flex-direction: column;
+        @include column;
     }
 
     .summary__progress-bar {
-        margin-bottom: 10px;
+        margin-bottom: $margin-bottom;
     }
 
     .summary__table {

@@ -54,16 +54,10 @@
 </template>
 
 <style lang="scss" scoped>
-    .datepicker {
-        margin-bottom: 10px;
-    }
-    
-    .macros {
-        margin-bottom: 15px;
-    }
-    
-    .meals {
-        margin-bottom: 15px;
+    @import "src/assets/scss/variables.scss";
+
+    .datepicker, .macros, .meals {
+        margin-bottom: $margin-bottom;
     }
     
 </style>
