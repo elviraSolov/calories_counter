@@ -54,26 +54,21 @@
         <!-- Добавление нового продукта в справочник -->
         <a-modal v-model:visible="modalVisible" title="Добавить продукт в справочник">
             <a-form :modal="form">
-
-            <a-form-item label="Название" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
-                <a-input v-model:value="form.name"/>
-            </a-form-item>
-
-            <a-form-item label="Калории" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
-                <a-input-number v-model:value="form.calories" :min="1"/>
-            </a-form-item>
-
-            <a-form-item label="Белки, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
-                <a-input-number v-model:value="form.proteins" :min="1"/>
-            </a-form-item>
-
-            <a-form-item label="Жиры, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
-                <a-input-number v-model:value="form.fats" :min="1"/>
-            </a-form-item>
-
-            <a-form-item label="Углеводы, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
-                <a-input-number v-model:value="form.carbs" :min="1"/>
-            </a-form-item>
+                <a-form-item label="Название" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                    <a-input v-model:value="form.name"/>
+                </a-form-item>
+                <a-form-item label="Калории" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                    <a-input-number v-model:value="form.calories" :min="1"/>
+                </a-form-item>
+                <a-form-item label="Белки, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                    <a-input-number v-model:value="form.proteins" :min="1"/>
+                </a-form-item>
+                <a-form-item label="Жиры, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                    <a-input-number v-model:value="form.fats" :min="1"/>
+                </a-form-item>
+                <a-form-item label="Углеводы, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
+                    <a-input-number v-model:value="form.carbs" :min="1"/>
+                </a-form-item>
             </a-form>
 
             <template #footer>

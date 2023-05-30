@@ -64,11 +64,12 @@
 
 <template>
     <div>
-        <a-button type="primary" @click="showModal">Добавить</a-button>
+        <a-button type="primary" @click="showModal">
+            Добавить
+        </a-button>
 
         <!-- Добавление продукта в прием пищи -->
         <a-modal v-model:visible="modalVisible" title="Добавление продукта">
-
             <a-form>
                 <a-form-item label="Продукт" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
                     <a-auto-complete
@@ -78,7 +79,6 @@
                         :filter-option="filterOption"
                     />
                 </a-form-item>
-
                 <a-form-item label="Масса, грамм" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
                     <a-input-number 
                         :min="1"
