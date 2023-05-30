@@ -6,42 +6,15 @@ export const useCalendarStore = defineStore('calendar', {
         currentDay: {},
     }),
     actions: {
-        // setCurrentDay(day, month, year) {
-        //     const selectedDay = this.calendar.find((element) => element.date.day == day && element.date.month == month && element.date.year == year)
-
-        //     if (selectedDay) {
-        //         this.currentDay = selectedDay
-        //     } else {
-        //         const newCalendarDay = {
-        //             date: {
-        //                 day: day,
-        //                 month: month,
-        //                 year: year
-        //             },
-        //             breakfast: [],
-        //             lunch: [],
-        //             dinner: [],
-        //             total: {
-        //                 calories: 0,
-        //                 proteins: 0,
-        //                 fats: 0,
-        //                 carbs: 0
-        //             }                    
-        //         }
-
-        //         this.calendar.push(newCalendarDay)
-        //         this.currentDay = newCalendarDay
-        //     }
-        // },
         setCurrentDay(day, month, year) {
-            // Проверяем наличие дня с выбранной датой
+            // Поиск дня в calendar
             const selectedDay = this.calendar.find((element) => element.date.day == day && element.date.month == month && element.date.year == year)
-        
+
             if (selectedDay) {
-                // Если найден день с той же датой, используем его вместо создания нового дня
+                // Если найден, установить как текущий (currentDay)
                 this.currentDay = selectedDay
             } else {
-                // В противном случае создаем новый день и добавляем его в массив
+                // Если не найден, добавить новый день в calendar и установить в текущий
                 const newCalendarDay = {
                     date: {
                         day: day,
@@ -58,31 +31,44 @@ export const useCalendarStore = defineStore('calendar', {
                         carbs: 0
                     }                    
                 }
-        
+                
                 this.calendar.push(newCalendarDay)
                 this.currentDay = newCalendarDay
             }
         },
         addProduct(meal, product) {
+            // Добавление продукта в выбранный прием пищи (meal)
             this.currentDay[meal].push(product)
 
             for (let prop in product) {
                 if (prop === 'name') {
                     continue
                 }
+
+                // Запись КБЖУ продукта в сводку за день 
                 this.currentDay.total[prop] += parseFloat(product[prop])
+                this.currentDay.total[prop] = Math.round(this.currentDay.total[prop] * 100) /100
             }
         },
-        removeProduct(meal, productName) {
+        removeProduct(meal, productKey) {
             for (let i = 0; i < this.currentDay[meal].length; i++) {
                 const product = this.currentDay[meal][i]
         
-                if (product.name === productName) {
+                // Поиск продукта по ключу из таблицы 
+                if (i == productKey) {
                     for (let prop in product) {
                         if (prop === 'name') {
                             continue
                         }
+
+                        // Обновление КБЖУ в дневной сводке
                         this.currentDay.total[prop] -= parseFloat(product[prop])
+                        this.currentDay.total[prop] = Math.round(this.currentDay.total[prop] * 100) /100
+                        
+                        // Проверка на близость к нулю для избежания слишком маленьких цифр 
+                        if(this.currentDay.total[prop] < 0.001) {
+                            this.currentDay.total[prop] = 0
+                        }
                     }
         
                     this.currentDay[meal].splice(i, 1)
@@ -93,6 +79,7 @@ export const useCalendarStore = defineStore('calendar', {
         getCaloriesPerDays(dates) {
             const caloriesPerDaysArray = []
 
+            // Массив с общим количеством калорий из диапазона дат
             for (let i = 0; i < dates.length; i++) {
                 const currentDay = this.calendar.find(
                     (element) => element.date.day == dates[i].day  &&

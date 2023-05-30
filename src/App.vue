@@ -1,29 +1,22 @@
-<script>
+<script setup>
   import "ant-design-vue/dist/antd.css"
   import food_base from './data/food_base.json'
   import {RouterView, RouterLink} from 'vue-router'
   import { ref } from 'vue'
-  
   import { useProductsStore } from './store/products'
 
-  export default {
-    setup() {
-      const { addProducts } = useProductsStore()
-      addProducts(food_base)
+  const { addProducts } = useProductsStore()
+  addProducts(food_base)
 
-      return {
-        selectedPage: ref(['1'])
-      }
-    }
-  }
- 
+  const selectedPage = ref(['1'])
 </script>
 
 <template>
   <a-layout class="layout">
     <a-layout-header class="layout__header">
+      <!-- Главное меню -->
       <a-menu
-        class="menu"
+        class="layout__menu"
         v-model:selectedKeys="selectedPage"
         theme="dark"
         mode="horizontal"
@@ -52,7 +45,7 @@
       </a-menu>
     </a-layout-header>
     <a-layout-content class="layout__content">
-      <div :style="{ background: '#fff', padding: '24px', minHeight: '280px', minHeight: '100%' }">
+      <div class="layout__content-wrapper">
         <RouterView />
       </div>
     </a-layout-content>
@@ -62,8 +55,7 @@
   </a-layout>
 </template>
 
-<style lang="scss" scoped>
-  @import "../src/assets/scss/variables.scss";
+<style scoped>
   .layout {
     height: 100vh;
   }
@@ -74,7 +66,7 @@
     width: 100%;
   }
 
-  .menu {
+  .layout__menu {
     width: 800px;
     margin: 0 auto;
   }
@@ -84,5 +76,12 @@
     margin: 0 auto;
     margin-top: 90px;
     overflow-y: auto;
+  }
+
+  .layout__content-wrapper {
+    background: #ffffff; 
+    padding: 24px;
+    min-height: 280px;
+    min-height: 100%;
   }
 </style>

@@ -8,17 +8,17 @@
     const { products } = useProductsStore()
     const calendarStore = useCalendarStore()
     
-    const visible = ref(false)
+    const modalVisible = ref(false)
 
     const form = reactive({
         product: '',
         weight: ''
     })
 
-    const showModal = () => visible.value = true
+    const showModal = () => modalVisible.value = true
     
     const hideModal = () => {
-        visible.value = false
+        modalVisible.value = false
         resetForm()
     }
 
@@ -35,6 +35,7 @@
         let product = products.find(product => product.name == form.product)
         const { calories, proteins, fats, carbs } = product
 
+        // Копирование продукта из базы в таблицу с указанием массы
         const copiedProduct = {
             ...product,
             weight: form.weight,
@@ -44,6 +45,7 @@
             carbs: `${(parseFloat(carbs) * form.weight) / 100} г`
         }
 
+        // Добавление продукта в прием пищи (meal)
         calendarStore.addProduct(meal, copiedProduct)
         hideModal()
     }
@@ -51,19 +53,21 @@
     const productNames = ref([])
 
     for (let i = 0; i < products.length; i++) {
-        productNames.value.push({value: products[i].name})
+        productNames.value.push({ value: products[i].name })
     }
 
+    // Поиск продукта в базе
     const filterOption = (input, productNames) => {
       return productNames.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
     }
 </script>
 
 <template>
-    <div class="modal">
+    <div>
         <a-button type="primary" @click="showModal">Добавить</a-button>
 
-        <a-modal v-model:visible="visible" title="Добавление продукта">
+        <!-- Добавление продукта в прием пищи -->
+        <a-modal v-model:visible="modalVisible" title="Добавление продукта">
 
             <a-form>
                 <a-form-item label="Продукт" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
@@ -78,7 +82,6 @@
                 <a-form-item label="Масса, грамм" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
                     <a-input-number 
                         :min="1"
-                        id="inputNumber" 
                         v-model:value="form.weight" 
                     />
                 </a-form-item>
@@ -98,9 +101,3 @@
         </a-modal>
     </div>
 </template>
-
-<style scoped>
-    .modal {
-        margin-bottom: 15px;
-    }
-</style>

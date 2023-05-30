@@ -1,21 +1,19 @@
 <script setup>
+    import formatDateMixin from '../mixins/FormatDateMixin'
     import { ref } from 'vue'
     import { Bar } from 'vue-chartjs'
     import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
     import { useCalendarStore } from '../store/calendar'
 
+    const { formatDate } = formatDateMixin.methods
+
     ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
     const { getCaloriesPerDays } = useCalendarStore()
 
-    const formatDate = date => ({
-        day: date.getDate(), 
-        month: date.getMonth() + 1, 
-        year: date.getFullYear()
-    })
-
     const dates = ref(null)
 
+    // Создание массива с датами из выбранного диапазона
     const createDatesArray = (dates)  => {
         let dateArray = []
         const startDate = dates[0].$d
@@ -31,8 +29,10 @@
         return dateArray
     }
 
+    // Форматирование массива дат для вывода графика
     const formatReadableDates = (dateArray) => dateArray.map(({day, month, year}) => `${day}.${month}.${year}`)
 
+    // Обновление данных графика
     const updateChartData = (days, calories) => {
         const datasets = [{ data: calories }]
         const labels = days
@@ -53,11 +53,14 @@
 <template>
     <div>
         <h1>Статистика</h1>
+
+        <!-- Выбор дат -->
         <a-range-picker 
             :value="dates"
             @change="onDatesChange"    
         />
 
+        <!-- Статистика за выбранный диапазон дат -->
         <div class="bar">
             <Bar v-if="dates"
                 :data="chartData"

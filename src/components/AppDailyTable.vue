@@ -20,6 +20,7 @@
 </script>
 
 <template>
+    <!-- Таблица для вывода продуктов в прием пищи (с указание массы) -->
     <a-table :columns="columns" :data-source="currentDay[meal]">
         <template #headerCell="{ column }">
             <template v-if="column.key === 'name'">
@@ -37,8 +38,8 @@
             </template>
         </template>
 
-        <template #operation="{ record }">
-            <a @click="calendarStore.removeProduct(meal, record.name)">Удалить</a>
+        <template #operation="{ index }">
+            <a @click="calendarStore.removeProduct(meal, index)">Удалить</a>
         </template>  
     </a-table> 
 </template>

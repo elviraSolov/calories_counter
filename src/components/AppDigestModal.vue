@@ -39,20 +39,21 @@
 
     const resetForm = () => {
         form.name = ''
-        form.calories = null
-        form.proteins = null
-        form.fats = null
-        form.carbs = null
+        form.calories = ''
+        form.proteins = ''
+        form.fats = ''
+        form.carbs = ''
     }
 </script>
 
 <template>
-    <div class="modal">
+    <div>
         <a-button type="primary" @click="showModal">
             Добавить
         </a-button>
+        <!-- Добавление нового продукта в справочник -->
         <a-modal v-model:visible="modalVisible" title="Добавить продукт в справочник">
-           <a-form :modal="form">
+            <a-form :modal="form">
 
             <a-form-item label="Название" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
                 <a-input v-model:value="form.name"/>
@@ -73,7 +74,7 @@
             <a-form-item label="Углеводы, грамм" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false">
                 <a-input-number v-model:value="form.carbs" :min="1"/>
             </a-form-item>
-           </a-form>
+            </a-form>
 
             <template #footer>
                 <a-button key="back" @click="hideModal">
@@ -86,9 +87,3 @@
         </a-modal>
     </div>
 </template>
-
-<style scoped>
-    .modal {
-        margin-bottom: 15px;
-    }
-</style>

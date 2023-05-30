@@ -13,6 +13,7 @@
 </script>
 
 <template>
+    <!-- Таблица для справочника (без указания массы) -->
     <a-table :columns="columns" :data-source="tableData">
         <template #headerCell="{ column }">
             <template v-if="column.key === 'name'">

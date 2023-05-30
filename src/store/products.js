@@ -6,6 +6,7 @@ export const useProductsStore = defineStore('products', {
         keyword: ''
     }),
     getters: {
+        // Фильтрация продуктов для поиска в справочнике
         filteredProducts() {
             return this.products.filter(
                 product => product.name.toLowerCase().startsWith(this.keyword.toLowerCase())
@@ -18,6 +19,7 @@ export const useProductsStore = defineStore('products', {
                 this.products.push(products[i])
             }
         },
+        // Добавление продукта в справочник
         addProduct(product) {
             this.products.push(product)
         },
