@@ -34,7 +34,7 @@
 
     // Обновление данных графика
     const updateChartData = (days, calories) => {
-        const datasets = [{ data: calories }]
+        const datasets = [{ label: "Калории", data: calories }]
         const labels = days
         chartData.value = { labels, datasets }
     }

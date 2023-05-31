@@ -59,6 +59,7 @@
             </a-radio-group>
         </a-form-item>
         <a-button 
+            class="btn"
             type="primary" 
             @click="setPersonalData()"
             :disabled="isFormInvalid"
