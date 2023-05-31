@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import DigestView from '../views/DigestView.vue'
 import StatisticsView from '../views/StatisticsView.vue'
-import SettingsView from '../views/SettingsView.vue'
+import CalculationView from '../views/CalculationView.vue'
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -23,9 +23,9 @@ const router = createRouter({
             component: StatisticsView 
         },
         {
-            path: '/settings',
-            name: 'settings',
-            component: SettingsView
+            path: '/calculation',
+            name: 'calculation',
+            component: CalculationView
         }
     ]
 })

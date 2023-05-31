@@ -1,12 +1,12 @@
 <script setup>
   import "ant-design-vue/dist/antd.css"
-  import food_base from './data/food_base.json'
+  import db from './data/db.json'
   import {RouterView, RouterLink} from 'vue-router'
   import { ref } from 'vue'
   import { useProductsStore } from './store/products'
 
   const { addProducts } = useProductsStore()
-  addProducts(food_base)
+  addProducts(db)
 
   const selectedPage = ref(['1'])
 </script>
@@ -38,7 +38,7 @@
           </router-link>
         </a-menu-item>
         <a-menu-item key="4">
-          <router-link to="/settings">
+          <router-link to="/calculation">
             Калькулятор
           </router-link>
         </a-menu-item>

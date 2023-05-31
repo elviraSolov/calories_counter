@@ -1,31 +1,21 @@
 <script setup>  
+    import Modal from '../components/UI/Modal.vue'
     import { ref, reactive, defineProps, computed } from 'vue'
     import { useProductsStore } from '../store/products'
     import { useCalendarStore } from '../store/calendar'
+    import resetFormMixin from '../mixins/ResetFormMixin'
+
+    const { resetForm } = resetFormMixin.methods
 
     const { meal }  = defineProps(['meal'])
     
     const { products } = useProductsStore()
     const calendarStore = useCalendarStore()
-    
-    const modalVisible = ref(false)
 
     const form = reactive({
         product: '',
         weight: ''
     })
-
-    const showModal = () => modalVisible.value = true
-    
-    const hideModal = () => {
-        modalVisible.value = false
-        resetForm()
-    }
-
-    const resetForm = () => {
-        form.product = ''
-        form.weight = ''
-    }
 
     const isFormInvalid = computed(() => {
         return !form.product || !form.weight
@@ -47,7 +37,6 @@
 
         // Добавление продукта в прием пищи (meal)
         calendarStore.addProduct(meal, copiedProduct)
-        hideModal()
     }
 
     const productNames = ref([])
@@ -63,41 +52,27 @@
 </script>
 
 <template>
-    <div>
-        <a-button type="primary" @click="showModal">
-            Добавить
-        </a-button>
-
-        <!-- Добавление продукта в прием пищи -->
-        <a-modal v-model:visible="modalVisible" title="Добавление продукта">
-            <a-form>
-                <a-form-item label="Продукт" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
-                    <a-auto-complete
-                        placeholder="Поиск..."
-                        v-model:value="form.product"
-                        :options="productNames"
-                        :filter-option="filterOption"
-                    />
-                </a-form-item>
-                <a-form-item label="Масса, грамм" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
-                    <a-input-number 
-                        :min="1"
-                        v-model:value="form.weight" 
-                    />
-                </a-form-item>
-            </a-form>
-
-            <template #footer>
-                <a-button key="back" @click="hideModal">Назад</a-button>
-                <a-button 
-                    key="submit" 
-                    type="primary" 
-                    @click="clickAddBtn"
-                    :disabled="isFormInvalid"
-                >
-                    Добавить
-                </a-button>
-            </template>
-        </a-modal>
-    </div>
+    <modal 
+        :isFormInvalid="isFormInvalid" 
+        @clickAddBtn="clickAddBtn"
+        @resetForm="resetForm(form)"
+    >
+       <!-- Добавление продукта в прием пищи -->
+        <a-form>
+            <a-form-item label="Продукт" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
+                <a-auto-complete
+                    placeholder="Поиск..."
+                    v-model:value="form.product"
+                    :options="productNames"
+                    :filter-option="filterOption"
+                />
+            </a-form-item>
+            <a-form-item label="Масса, грамм" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false">
+                <a-input-number 
+                    :min="1"
+                    v-model:value="form.weight" 
+                />
+            </a-form-item>
+        </a-form>
+    </modal>
 </template>
