@@ -1,6 +1,6 @@
 <script setup>
   import "ant-design-vue/dist/antd.css"
-  import db from './data/db.json'
+  import db from '.././db.json'
   import {RouterView, RouterLink} from 'vue-router'
   import { ref } from 'vue'
   import { useProductsStore } from './store/products'
