@@ -1,9 +1,6 @@
 <script setup>
     import { computed, reactive } from 'vue'
     import { useCalculationStore } from '../store/calculation'
-    import resetFormMixin from '../mixins/ResetFormMixin'
-
-    const { resetForm } = resetFormMixin.methods
     
     const { personalData, calculateDailyIntake } = useCalculationStore()
 
@@ -23,7 +20,6 @@
         personalData.activity = form.activity
 
         calculateDailyIntake()
-        resetForm(form)
     }
 
     const isFormInvalid = computed(() => {

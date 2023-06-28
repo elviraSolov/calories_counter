@@ -13,13 +13,14 @@
     <div class="summary">
         <a-progress 
             class="summary__progress-bar"
+            v-if="personalData.dailyIntake > 0"
             :percent="Math.round(100 * currentDay.total.calories / personalData.dailyIntake)" 
         />
         
         <h2 class="summary__title">Сводка</h2>
         
         <table class="summary__table table">
-            <tr>
+            <tr v-if="personalData.dailyIntake > 0">
                 <td>Осталось калорий</td>
                 <td>{{ personalData.dailyIntake - currentDay.total.calories }}</td>
             </tr>
@@ -27,7 +28,7 @@
                 <td>Употреблено калорий</td>
                 <td>{{ currentDay.total.calories }}</td>
             </tr>
-            <tr>
+            <tr v-if="personalData.dailyIntake > 0">
                 <td>{{ Math.round(100 * currentDay.total.calories / personalData.dailyIntake) }} % от РСК</td>
                 <td>{{ personalData.dailyIntake }}</td>
             </tr>

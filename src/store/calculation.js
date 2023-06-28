@@ -8,7 +8,7 @@ export const useCalculationStore = defineStore('calculation', {
       height: null,
       sex: null,
       activity: null,
-      dailyIntake: 2200
+      dailyIntake: 0
     }
   }),
   actions: {
